@@ -1,0 +1,189 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Auth App',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const LoginScreen(),
+    );
+  }
+}
+
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Авторизація')),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Поле для логіна
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Логін',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16),
+            // Поле для пароля
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Пароль',
+                border: OutlineInputBorder(),
+              ),
+              obscureText: true,
+            ),
+            const SizedBox(height: 24),
+            // Кнопка авторизації
+            ElevatedButton(
+              onPressed: () {
+                // Логіка авторизації
+              },
+              child: const Text('Увійти'),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Кнопка переходу до реєстрації
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const RegistrationScreen()),
+                    );
+                  },
+                  child: const Text('Реєстрація'),
+                ),
+                // Кнопка переходу до відновлення паролю
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const PasswordRecoveryScreen()),
+                    );
+                  },
+                  child: const Text('Забули пароль?'),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class RegistrationScreen extends StatelessWidget {
+  const RegistrationScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Реєстрація')),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Поле для імені
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Ім\'я',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16),
+            // Поле для логіна
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Логін',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16),
+            // Поле для пароля
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Пароль',
+                border: OutlineInputBorder(),
+              ),
+              obscureText: true,
+            ),
+            const SizedBox(height: 24),
+            // Кнопка реєстрації
+            ElevatedButton(
+              onPressed: () {
+                // Логіка реєстрації
+              },
+              child: const Text('Зареєструватися'),
+            ),
+            const SizedBox(height: 16),
+            // Кнопка повернення до авторизації
+            OutlinedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Повернутися'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class PasswordRecoveryScreen extends StatelessWidget {
+  const PasswordRecoveryScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Відновлення паролю')),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Поле для логіна/електронної пошти
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Логін або Email',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 24),
+            // Кнопка відновлення паролю
+            ElevatedButton(
+              onPressed: () {
+                // Логіка відновлення паролю
+              },
+              child: const Text('Відновити пароль'),
+            ),
+            const SizedBox(height: 16),
+            // Кнопка повернення до авторизації
+            OutlinedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Повернутися'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
