@@ -1,0 +1,129 @@
+main.dart
+import 'package:flutter/material.dart';
+import 'math_functions.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Math Function Calculator',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const HomeScreen(),
+    );
+  }
+}
+
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final TextEditingController _controller = TextEditingController();
+  double? _result;
+
+  void _calculateResult() {
+    final x = int.tryParse(_controller.text);
+    if (x != null) {
+      setState(() {
+        _result = MathFunctions.calculateY(x);
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please enter a valid number")),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Math Function Calculator'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Enter x value to calculate y = 2x²:',
+              style: TextStyle(fontSize: 18),
+            ),
+            TextField(
+              controller: _controller,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                hintText: 'Enter a number',
+              ),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _calculateResult,
+              child: const Text('Calculate'),
+            ),
+            const SizedBox(height: 20),
+            _result != null
+                ? Text(
+              'y = 2x² = $_result',
+              style: const TextStyle(fontSize: 20),
+            )
+                : const Text(
+              'Enter a number and press Calculate',
+              style: TextStyle(fontSize: 16),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+math_functions.dart
+class MathFunctions {
+  // Розрахунок функції y = 2x^2
+  static double calculateY(int x) {
+    return 2 * x * x.toDouble();
+  }
+}
+
+winget_test.dart
+class MathFunctions {
+  // Розрахунок функції y = 2x^2
+  static double calculateY(int x) {
+    return 2 * x * x.toDouble();
+  }
+}
+ math_functions_test.dart
+import 'package:flutter_test/flutter_test.dart';
+import '../lib/math_functions.dart';
+
+void main() {
+  test('Test 1: When x=0, y=2x² = 0', () {
+    expect(MathFunctions.calculateY(0), 0.0);
+  });
+
+  test('Test 2: When x=1, y=2x² = 2', () {
+    expect(MathFunctions.calculateY(1), 2.0);
+  });
+
+  test('Test 3: When x=-1, y=2x² = 2', () {
+    expect(MathFunctions.calculateY(-1), 2.0);
+  });
+
+  test('Test 4: When x=2, y=2x² = 8', () {
+    expect(MathFunctions.calculateY(2), 8.0);
+  });
+
+  test('Test 5: When x=-2, y=2x² = 8', () {
+    expect(MathFunctions.calculateY(-2), 8.0);
+  });
+}
