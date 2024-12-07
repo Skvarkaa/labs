@@ -1,0 +1,101 @@
+main.dartimport 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'note_app.dart';
+
+void main() async {
+  await Hive.initFlutter();
+  await Hive.openBox('notesBox');
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Note App',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const NoteApp(),
+    );
+  }
+}
+Note_app.dart
+import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+
+class NoteApp extends StatefulWidget {
+  const NoteApp({Key? key}) : super(key: key);
+
+  @override
+  _NoteAppState createState() => _NoteAppState();
+}
+
+class _NoteAppState extends State<NoteApp> {
+  final TextEditingController _noteController = TextEditingController();
+  final Box _notesBox = Hive.box('notesBox');
+
+  void _addNote() {
+    final note = _noteController.text.trim();
+    if (note.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Note cannot be empty")),
+      );
+      return;
+    }
+    final now = DateTime.now().toIso8601String();
+    _notesBox.add({'note': note, 'createdAt': now});
+    _noteController.clear();
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final notes = _notesBox.values.toList().reversed.toList();
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Note App'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _noteController,
+              decoration: const InputDecoration(
+                labelText: 'Enter a note',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: _addNote,
+              child: const Text('Add Note'),
+            ),
+            const SizedBox(height: 20),
+            Expanded(
+              child: ListView.builder(
+                itemCount: notes.length,
+                itemBuilder: (context, index) {
+                  final note = notes[index];
+                  return ListTile(
+                    title: Text(note['note']),
+                    subtitle: Text(note['createdAt']),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () {
+                        _notesBox.deleteAt(index);
+                        setState(() {});
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
